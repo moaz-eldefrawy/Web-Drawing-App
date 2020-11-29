@@ -6,12 +6,78 @@
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <link rel="icon" href="<%= BASE_URL %>favicon.ico">
     <title><%= htmlWebpackPlugin.options.title %></title>
+
+    <style>
+      button {
+        border:none;
+        background-position: center; /* Center the image */
+        background-repeat: no-repeat; /* Do not repeat the image */
+        background-size: cover; /* Resize the background image to cover the entire container */
+
+        width: 80px;
+        height: 80px;
+        border: 1px lightgrey;
+      }
+
+      button:hover{
+        cursor: pointer;
+      }
+
+      #line {
+        background-image: url('./assets/line.png')
+      }
+      #triangle {
+        background-image: url('./assets/triangle.png');
+        width: 100px;
+      }
+      #square {
+        background-image: url('./assets/square.png')
+      }
+      #rectangle {
+        background-image: url('./assets/rectangle.png')
+      }
+      #ellipse {
+        background-image: url('./assets/ellipse.png')
+      }
+      #circle {
+        background-image: url('./assets/circle.png')
+      }
+      #undo {
+        background-image: url('./assets/undo.png')
+      }
+      #redo {
+        background-image: url('./assets/redo.png')
+      }
+      #save {
+        background-image: url('https://miro.medium.com/max/1200/0*vdUY_dRmKtBvgYaM.jpeg');
+      }
+    </style>
   </head>
+
   <body>
     <noscript>
       <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
     </noscript>
-    <div id="app"></div>
+    <!--<div id="app"></div> -->
+    <div id="menu">
+      <button id="line" onclick="lineClick()"></button>
+      <button id="triangle" onclick="triangleClick()"></button>
+      <button id="square" onclick="squareClick()"></button>
+      <button id="rectangle" onclick="rectangleClick()"></button>
+      <button id="ellipse" onclick="ellipseClick()"></button>
+      <button id="circle" onclick="circleClick()"></button>
+      <button id="undo" onclick="undo()"></button>
+      <button id="redo" onclick="redo()"></button>
+      <button id="save" onclick="savek()"></button>
+    </div>
+
+    <canvas width="1200" height="900" id="canvas" style="border: 1px lightgrey solid">
+
+    </canvas>
+    <script src="vueCode.js">
+    </script>
+    <script src="script.js"> </script>
     <!-- built files will be auto injected -->
   </body>
+
 </html>
