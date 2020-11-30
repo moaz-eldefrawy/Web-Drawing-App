@@ -20,8 +20,8 @@ class Shape {
   }
 
   setFillColor(color) {
-    this.fillColor = color;
-  }
+      this.fillColor = color;
+    }
 
   setColor(color) {
     this.setFillColor(color);
@@ -66,8 +66,19 @@ class Square extends Shape {
   }
 
   static instance(p1, p2) {
-    let width = Math.min(Math.abs(p1.x - p2.x), Math.abs(p1.y - p2.y));
+    let width;
+    let deltaX = Math.abs(p1.x - p2.x);
+    let deltaY = Math.abs(p1.y - p2.y);
+    if(deltaX <= deltaY){
+      width = p2.x - p1.x; 
+    } else {
+      width = p2.y - p1.y;
+    }
     return new Square(p1, width);
+  }
+
+   type(){
+    return "square"
   }
 }
 
@@ -121,6 +132,11 @@ class Rectangle extends Shape {
     this.p1 = pos;
     this.p2 = new Point(this.p1.x + dx, this.p1.y + dy);
   }
+
+  
+  type(){
+    return "point"
+  }
 }
 
 class Circle extends Shape {
@@ -139,6 +155,7 @@ class Circle extends Shape {
     ctx.strokeStyle = this.edgeColor;
     ctx.arc(this.p1.x, this.p1.y, this.radius, 0, Math.PI * 2, 0);
     ctx.stroke();
+    ctx.fill()
   }
 
   inRange(point) {
@@ -157,6 +174,11 @@ class Circle extends Shape {
 
   static instance(p1, p2) {
     return new Circle(p1, distance(p1, p2));
+  }
+
+  
+   type(){
+    return "circle"
   }
 }
 
@@ -178,6 +200,7 @@ class Line extends Shape {
     ctx.moveTo(this.p1.x, this.p1.y);
     ctx.lineTo(this.p2.x, this.p2.y);
     ctx.stroke();
+    ctx.fill();
   }
 
   resize() {}
@@ -202,6 +225,11 @@ class Line extends Shape {
 
     this.p1 = pos;
     this.p2 = this.p1.add(d);
+  }
+
+  
+   type(){
+    return "line"
   }
 }
 
@@ -232,6 +260,7 @@ class Ellipse extends Shape {
       2 * Math.PI
     );
     ctx.stroke();
+    ctx.fill();
   }
 
   inRange(point) {
@@ -253,6 +282,10 @@ class Ellipse extends Shape {
     let radiusX = Math.abs(p2.x - p1.x);
     let radiusY = Math.abs(p1.y - p2.y);
     return new Ellipse(p1, radiusX, radiusY);
+  }
+
+   type(){
+    return "ellipse"
   }
 }
 
@@ -279,6 +312,7 @@ class Triangle extends Shape {
     ctx.lineTo(this.p3.x, this.p3.y);
     ctx.closePath();
     ctx.stroke();
+    ctx.fill()
   }
 
   resize() {}
@@ -308,5 +342,9 @@ class Triangle extends Shape {
     this.p1 = pos;
     this.p2 = this.p1.add(d2);
     this.p3 = this.p1.add(d3);
+  }
+
+  type(){
+    return "triangle"
   }
 }
