@@ -21,6 +21,7 @@ class DrawingEngine {
       if (draEng.shapes[i] != shape) arr.push(draEng.shapes[i]);
     }
     this.shapes = arr;
+    draEng.refresh()
   }
 
   shapeToResize() {
@@ -93,7 +94,7 @@ class DrawingEngine {
   }
 
   clearSelectedShape() {
-    if(!draEng.selectedShape){
+    if(draEng.selectedShape != null && draEng.selectedShape != undefined){
       draEng.selectedShape.unselect();
       draEng.selectedShape = null;
       draEng.refresh();

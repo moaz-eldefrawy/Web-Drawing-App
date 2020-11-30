@@ -87,6 +87,17 @@ button:hover {
   background-image: url("./assets/redo.png");
 }
 
+#save {
+  background-image: url("./assets/save.png");
+}
+
+#delete {
+  background-image: url("./assets/delete.png");    
+}
+
+#colorBtn{
+  background-image: url("./assets/colorBtn.png");      
+}
 /* END MENU */
 
 #app {

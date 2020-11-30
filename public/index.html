@@ -12,7 +12,7 @@
         box-sizing: border-box;
       }
       body{
-        background-color: #222;
+        background-color: #686968;
       }
 
       #menu {
@@ -39,40 +39,14 @@
         width: 40px;
         height: 40px;
         border: 1px lightgrey;
+        margin:5px;
+        padding: 5px;
       }
 
       button:hover {
         cursor: pointer;
       }
 
-      #line {
-        background-image: url("./assets/line.png");
-      }
-      #triangle {
-        background-image: url("./assets/triangle.png");
-        width: 100px;
-      }
-      #square {
-        background-image: url("./assets/square.png");
-      }
-      #rectangle {
-        background-image: url("./assets/rectangle.png");
-      }
-      #ellipse {
-        background-image: url("./assets/ellipse.png");
-      }
-      #circle {
-        background-image: url("./assets/circle.png");
-      }
-      #undo {
-        background-image: url("./assets/undo.png");
-      }
-      #redo {
-        background-image: url("./assets/redo.png");
-      }
-      #save {
-        background-image: url("https://miro.medium.com/max/1200/0*vdUY_dRmKtBvgYaM.jpeg");
-      }
     </style>
   </head>
 
@@ -95,14 +69,14 @@
       <button id="undo" onclick="undo()"></button>
       <button id="redo" onclick="redo()"></button>
       <button id="save" onclick="save()"></button>
-
+      <button id="delete" onclick="deleteShape()"></button>
       <!-- Color picker -->
       <div style="display: flex; flex-direction: column; align-items: center;">
         <button
           id="colorBtn"
           onclick="draEng.coloring = true; console.log('coloring = true')"
         >
-          Apply Color
+          
         </button>
         <input id="color" type="color" />
       </div>

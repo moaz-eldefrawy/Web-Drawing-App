@@ -118,3 +118,11 @@ function triangleClick() {
 function ellipseClick() {
   ShapeFactory.create2PointsShape("ellipse");
 }
+
+function deleteShape(){
+
+  console.log(draEng.selectedShape)
+  let shape = draEng.selectedShape;
+  draEng.clearSelectedShape()
+  draEng.deleteShape(shape)
+}
