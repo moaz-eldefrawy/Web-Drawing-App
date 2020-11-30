@@ -38,7 +38,7 @@ class DrawingEngine {
     // shape to resize
     draEng.resizedShape = arr[0];
     if(draEng.resizedShape === draEng.selectedShape &&
-      event.button == 2)
+      event.button == 2 && draEng.moving == false)
     { 
       canvas.addEventListener("mousemove", draEng.detectResizeChange )
       canvas.addEventListener("mouseup", draEng.detectResizeRelase)  

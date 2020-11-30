@@ -135,7 +135,7 @@ class Rectangle extends Shape {
 
   
   type(){
-    return "point"
+    return "rectangle"
   }
 }
 
