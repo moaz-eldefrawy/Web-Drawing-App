@@ -28,8 +28,7 @@ class DrawingEngine {
     const pos = getMousePosition(canvas, event);
     let arr = draEng.getShapesInRange(pos);
     draEng.resizedShape = arr[0];
-    console.log("db->",draEng.resizedShape)
-
+   
     draEng.clearSelectedShape();
   }
 
@@ -38,7 +37,6 @@ class DrawingEngine {
     let arr = draEng.getShapesInRange(pos);
     // shape to resize
     draEng.resizedShape = arr[0];
-    console.log(event.button)
     if(draEng.resizedShape === draEng.selectedShape &&
       event.button == 2)
     { 
@@ -53,13 +51,12 @@ class DrawingEngine {
   detectResizeChange(event){
     let p1 = draEng.resizedShape.p1 || draEng.resizedShape.center;
     let p2 = getMousePosition(canvas, event)
-    console.log(p1,p2)
     ShapeFactory.drawDottedShape(event,p1,draEng.resizedShape.type())
   }
 
   detectResizeRelase(event){
-    console.log("mouseUp")
-    console.log(draEng.resizedShape)
+ //   console.log("mouseUp")
+   // console.log(draEng.resizedShape)
     let p1 = draEng.resizedShape.p1 || draEng.resizedShape.center;
     let p2 = getMousePosition(canvas, event);
     canvas.removeEventListener("mousemove", draEng.detectResizeChange )
@@ -69,6 +66,7 @@ class DrawingEngine {
     /// You can disable this shape and add a new one
 
     let newShape = ShapeFactory.getShape(p1, p2, draEng.resizedShape.type());
+    newShape.setFillColor(draEng.resizedShape.fillColor)
     draEng.deleteShape(draEng.resizedShape)
     draEng.clearSelectedShape();
     draEng.addShape( newShape );
@@ -97,6 +95,7 @@ class DrawingEngine {
     if(draEng.selectedShape != null && draEng.selectedShape != undefined){
       draEng.selectedShape.unselect();
       draEng.selectedShape = null;
+      draEng.moving=false;
       draEng.refresh();
     }
   }

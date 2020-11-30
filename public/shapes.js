@@ -1,6 +1,6 @@
 class Shape {
   constructor() {
-    this.oldEdgeColor = null;
+    this.oldEdgeColor = new Color(0,0,0);
   }
 
   select() {
