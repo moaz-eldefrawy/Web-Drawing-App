@@ -1,6 +1,6 @@
 class Shape {
   constructor() {
-    this.oldEdgeColor = new Color(0,0,0);
+    this.oldEdgeColor = new Color(0, 0, 0);
   }
 
   select() {
@@ -20,8 +20,8 @@ class Shape {
   }
 
   setFillColor(color) {
-      this.fillColor = color;
-    }
+    this.fillColor = color;
+  }
 
   setColor(color) {
     this.setFillColor(color);
@@ -47,7 +47,13 @@ class Square extends Shape {
     ctx.strokeRect(this.p1.x, this.p1.y, this.width, this.width);
   }
 
-  resize() {}
+  clone() {
+    let copy = new Square(this.p1, this.width);
+    copy.edgeColor = this.edgeColor;
+    copy.fillColor = this.fillColor;
+
+    return copy;
+  }
 
   rePosition(pos) {
     this.p1 = pos;
@@ -66,19 +72,25 @@ class Square extends Shape {
   }
 
   static instance(p1, p2) {
+    //to insure width is positive
+    //make p1 the smaller x,y (top left)
+    if (!p1.smaller(p2)) {
+      [p1, p2] = [p2, p1];
+    }
+
     let width;
     let deltaX = Math.abs(p1.x - p2.x);
     let deltaY = Math.abs(p1.y - p2.y);
-    if(deltaX <= deltaY){
-      width = p2.x - p1.x; 
+    if (deltaX <= deltaY) {
+      width = p2.x - p1.x;
     } else {
       width = p2.y - p1.y;
     }
     return new Square(p1, width);
   }
 
-   type(){
-    return "square"
+  type() {
+    return "square";
   }
 }
 
@@ -89,6 +101,7 @@ class Rectangle extends Shape {
     super();
     this.p1 = p1;
     this.p2 = p2;
+
     this.edgeColor = new Color(0, 0, 0);
     this.fillColor = new Color(255, 255, 255);
   }
@@ -112,18 +125,29 @@ class Rectangle extends Shape {
   }
 
   inRange(point) {
-    if (point.x >= this.p1.x && point.x <= this.p2.x) {
+    let max_x = Math.max(this.p1.x, this.p2.x);
+    let min_x = Math.min(this.p1.x, this.p2.x);
+
+    let max_y = Math.max(this.p1.y, this.p2.y);
+    let min_y = Math.min(this.p1.y, this.p2.y);
+
+    if (point.x >= min_x && point.x <= max_x) {
       //in horizontal range
 
-      if (point.y >= this.p1.y && point.y <= this.p2.y) {
+      if (point.y >= min_y && point.y <= max_y) {
         return true;
       }
     }
-
     return false;
   }
 
-  resize() {}
+  clone() {
+    let copy = new Rectangle(this.p1, this.p2);
+    copy.edgeColor = this.edgeColor;
+    copy.fillColor = this.fillColor;
+
+    return copy;
+  }
 
   rePosition(pos) {
     let dx = this.p2.x - this.p1.x,
@@ -133,9 +157,8 @@ class Rectangle extends Shape {
     this.p2 = new Point(this.p1.x + dx, this.p1.y + dy);
   }
 
-  
-  type(){
-    return "rectangle"
+  type() {
+    return "rectangle";
   }
 }
 
@@ -155,7 +178,7 @@ class Circle extends Shape {
     ctx.strokeStyle = this.edgeColor;
     ctx.arc(this.p1.x, this.p1.y, this.radius, 0, Math.PI * 2, 0);
     ctx.stroke();
-    ctx.fill()
+    ctx.fill();
   }
 
   inRange(point) {
@@ -166,7 +189,13 @@ class Circle extends Shape {
     return false;
   }
 
-  resize() {}
+  clone() {
+    let copy = new Circle(this.p1, this.radius);
+    copy.edgeColor = this.edgeColor;
+    copy.fillColor = this.fillColor;
+
+    return copy;
+  }
 
   rePosition(pos) {
     this.p1 = pos;
@@ -176,9 +205,8 @@ class Circle extends Shape {
     return new Circle(p1, distance(p1, p2));
   }
 
-  
-   type(){
-    return "circle"
+  type() {
+    return "circle";
   }
 }
 
@@ -203,7 +231,13 @@ class Line extends Shape {
     ctx.fill();
   }
 
-  resize() {}
+  clone() {
+    let copy = new Circle(this.p1, this.p2);
+    copy.edgeColor = this.edgeColor;
+    copy.fillColor = this.fillColor;
+
+    return copy;
+  }
 
   inRange(point) {
     let dx = (this.p2.x - this.p1.x) / 100,
@@ -211,8 +245,9 @@ class Line extends Shape {
 
     let start = new Point(this.p1.x, this.p1.y);
 
-    while (start.x <= this.p2.x) {
+    while (Math.abs(start.x - this.p2.x) >= 1) {
       if (distance(start, point) < 10) return true;
+
       start.x += dx;
       start.y += dy;
     }
@@ -221,15 +256,19 @@ class Line extends Shape {
   }
 
   rePosition(pos) {
-    let d = this.p2.subtract(this.p1);
+    let midPoint = new Point(
+      (this.p1.x + this.p2.x) / 2,
+      (this.p1.y + this.p2.y) / 2
+    );
 
-    this.p1 = pos;
-    this.p2 = this.p1.add(d);
+    let delta = pos.subtract(midPoint);
+
+    this.p1 = this.p1.add(delta);
+    this.p2 = this.p2.add(delta);
   }
 
-  
-   type(){
-    return "line"
+  type() {
+    return "line";
   }
 }
 
@@ -272,7 +311,18 @@ class Ellipse extends Shape {
       return true;
     return false;
   }
-  resize() {}
+  clone() {
+    let copy = new Ellipse(
+      this.center,
+      this.radiusX,
+      this.radiusY,
+      this.rotation
+    );
+    copy.edgeColor = this.edgeColor;
+    copy.fillColor = this.fillColor;
+
+    return copy;
+  }
 
   rePosition(pos) {
     this.center = pos;
@@ -284,14 +334,10 @@ class Ellipse extends Shape {
     return new Ellipse(p1, radiusX, radiusY);
   }
 
-   type(){
-    return "ellipse"
+  type() {
+    return "ellipse";
   }
 }
-
-/*
-var e = new Ellipse(new Point(300, 300), 100, 150);
-e.draw();*/
 
 class Triangle extends Shape {
   constructor(p1, p2, p3) {
@@ -312,10 +358,16 @@ class Triangle extends Shape {
     ctx.lineTo(this.p3.x, this.p3.y);
     ctx.closePath();
     ctx.stroke();
-    ctx.fill()
+    ctx.fill();
   }
 
-  resize() {}
+  clone() {
+    let copy = new Line(this.p1, this.p2, this.p3);
+    copy.edgeColor = this.edgeColor;
+    copy.fillColor = this.fillColor;
+
+    return copy;
+  }
 
   inRange(p) {
     let p1 = this.p1,
@@ -344,7 +396,7 @@ class Triangle extends Shape {
     this.p3 = this.p1.add(d3);
   }
 
-  type(){
-    return "triangle"
+  type() {
+    return "triangle";
   }
 }

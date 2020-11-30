@@ -1,34 +1,41 @@
 class DrawingEngine {
   constructor() {
     this.shapes = [];
-    this.actionStack = [];
+
     this.coloring = false;
     this.selectedShape = null;
     this.moving = false;
 
     /*** Know Which Shape the User clicked  ***/
     canvas.addEventListener("click", this.detectClick);
-    canvas.addEventListener("mousemove", this.detectMove)
-    
+    canvas.addEventListener("mousemove", this.detectMove);
+
     // for resizing
     canvas.addEventListener("mousedown", this.detectResizeStart);
-   
   }
-
-  deleteShape(shape){
-    let arr=[];
+  shapeIndex(shape) {
+    for (let i = 0; i < this.shapes.length; i++) {
+      if (this.shapes[i] == shape) return i;
+    }
+  }
+  deleteShape(shape) {
+    let arr = [];
+    let index = -1;
     for (let i = 0; i < draEng.shapes.length; i++) {
       if (draEng.shapes[i] != shape) arr.push(draEng.shapes[i]);
+      else index = i;
     }
     this.shapes = arr;
-    draEng.refresh()
+
+    undoRedoManager.deleteShape(index);
+    draEng.refresh();
   }
 
   shapeToResize() {
     const pos = getMousePosition(canvas, event);
     let arr = draEng.getShapesInRange(pos);
     draEng.resizedShape = arr[0];
-   
+
     draEng.clearSelectedShape();
   }
 
@@ -37,40 +44,41 @@ class DrawingEngine {
     let arr = draEng.getShapesInRange(pos);
     // shape to resize
     draEng.resizedShape = arr[0];
-    if(draEng.resizedShape === draEng.selectedShape &&
-      event.button == 2 && draEng.moving == false)
-    { 
-      canvas.addEventListener("mousemove", draEng.detectResizeChange )
-      canvas.addEventListener("mouseup", draEng.detectResizeRelase)  
+    if (
+      draEng.resizedShape === draEng.selectedShape &&
+      event.button == 2 &&
+      draEng.moving == false
+    ) {
+      canvas.addEventListener("mousemove", draEng.detectResizeChange);
+      canvas.addEventListener("mouseup", draEng.detectResizeRelase);
     }
   }
 
-  
-
-  
-  detectResizeChange(event){
-    let p1 = draEng.resizedShape.p1 || draEng.resizedShape.center;
-    let p2 = getMousePosition(canvas, event)
-    ShapeFactory.drawDottedShape(event,p1,draEng.resizedShape.type())
-  }
-
-  detectResizeRelase(event){
- //   console.log("mouseUp")
-   // console.log(draEng.resizedShape)
+  detectResizeChange(event) {
     let p1 = draEng.resizedShape.p1 || draEng.resizedShape.center;
     let p2 = getMousePosition(canvas, event);
-    canvas.removeEventListener("mousemove", draEng.detectResizeChange )
-    canvas.removeEventListener("mouseup", draEng.detectResizeRelase )  
-  
+    ShapeFactory.drawDottedShape(event, p1, draEng.resizedShape.type());
+  }
+
+  detectResizeRelase(event) {
+    //   console.log("mouseUp")
+    // console.log(draEng.resizedShape)
+    let p1 = draEng.resizedShape.p1 || draEng.resizedShape.center;
+    let p2 = getMousePosition(canvas, event);
+    canvas.removeEventListener("mousemove", draEng.detectResizeChange);
+    canvas.removeEventListener("mouseup", draEng.detectResizeRelase);
+
     /// update the chosen shape
     /// You can disable this shape and add a new one
 
     let newShape = ShapeFactory.getShape(p1, p2, draEng.resizedShape.type());
-    newShape.setFillColor(draEng.resizedShape.fillColor)
-    draEng.deleteShape(draEng.resizedShape)
+    newShape.setFillColor(draEng.resizedShape.fillColor);
+    undoRedoManager.shapeChange(newShape, draEng.shapeIndex(newShape));
+
+    draEng.deleteShape(draEng.resizedShape);
     draEng.clearSelectedShape();
-    draEng.addShape( newShape );
-    draEng.refresh()
+    draEng.addShape(newShape);
+    draEng.refresh();
   }
 
   //give it a mouse point, returns the shapes that return inRange() = true
@@ -87,15 +95,26 @@ class DrawingEngine {
 
     let arr = draEng.getShapesInRange(pos);
 
+    //Change pointer if pointing at shape
     if (arr.length != 0) canvas.style.cursor = "pointer";
     else canvas.style.cursor = "initial";
+
+    //handles moving
+    if (draEng.moving == true) {
+      let shape = draEng.selectedShape;
+      shape.rePosition(pos);
+      undoRedoManager.shapeChange(shape, draEng.shapeIndex(shape));
+
+      draEng.refresh();
+      return;
+    }
   }
 
   clearSelectedShape() {
-    if(draEng.selectedShape != null && draEng.selectedShape != undefined){
+    if (draEng.selectedShape != null && draEng.selectedShape != undefined) {
       draEng.selectedShape.unselect();
       draEng.selectedShape = null;
-      draEng.moving=false;
+      draEng.moving = false;
       draEng.refresh();
     }
   }
@@ -104,31 +123,41 @@ class DrawingEngine {
     const pos = getMousePosition(canvas, event);
     let arr = draEng.getShapesInRange(pos);
 
+    //unselect when clicking empty space && there is a shape selected
+    if (arr.length == 0 && draEng.selectedShape != null) {
+      let shape = draEng.selectedShape;
+      shape.unselect();
+      draEng.selectedShape = null;
+      draEng.refresh();
+    }
+
     //handles coloring
     if (draEng.coloring == true) {
       let hex = document.getElementById("color").value;
       console.log(hex);
 
-      // color all seleced shapes
-      for (let i = 0; i < arr.length; i++) arr[i].setColor(hex);
+      // color all shapes under mouse
+      for (let i = 0; i < arr.length; i++) {
+        arr[i].setColor(hex);
+        undoRedoManager.shapeChange(arr[i], draEng.shapeIndex(arr[i]));
+      }
 
       draEng.refresh();
+
       draEng.coloring = false;
 
       return;
     }
 
-    //handles moving
+    //Clicked while in moving state => place shape at pos
     if (draEng.moving == true) {
       let shape = draEng.selectedShape;
-      
-      shape.rePosition(pos);
+
+      shape.unselect();
+      draEng.selectedShape = null;
       draEng.moving = false;
       document.getElementById("state").innerHTML = "";
-      draEng.selectedShape.unselect();
-      draEng.selectedShape = null;
       draEng.refresh();
-
       return;
     }
 
@@ -139,7 +168,7 @@ class DrawingEngine {
         document.getElementById("state").innerHTML = "Moving";
       }
 
-      // one was already selected 
+      // one was already selected
       if (draEng.selectedShape != null) draEng.selectedShape.unselect();
       draEng.selectedShape = arr[0];
       arr[0].select();
@@ -150,6 +179,7 @@ class DrawingEngine {
 
   addShape(shape) {
     this.shapes.push(shape);
+    undoRedoManager.createShape(shape);
   }
 
   refresh() {

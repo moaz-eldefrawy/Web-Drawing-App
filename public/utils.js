@@ -11,6 +11,14 @@ class Point {
   add(point) {
     return new Point(this.x + point.x, this.y + point.y);
   }
+
+  smaller(point) {
+    if (this.y < point.y) return true;
+
+    if (this.x < point.x) return true;
+
+    return false;
+  }
 }
 
 /*GLOBAL INSTANCE */

@@ -8,10 +8,10 @@
     <title><%= htmlWebpackPlugin.options.title %></title>
 
     <style>
-      *{
+      * {
         box-sizing: border-box;
       }
-      body{
+      body {
         background-color: #686968;
       }
 
@@ -20,16 +20,14 @@
         text-align: center;
       }
 
-      #canvasWrapper{
+      #canvasWrapper {
         display: flex;
         justify-content: center;
       }
-      #canvas{
+      #canvas {
         background: white;
-
       }
       button {
-
         border: none;
         border-radius: 30px;
         background-position: center; /* Center the image */
@@ -39,14 +37,13 @@
         width: 40px;
         height: 40px;
         border: 1px lightgrey;
-        margin:5px;
+        margin: 5px;
         padding: 5px;
       }
 
       button:hover {
         cursor: pointer;
       }
-
     </style>
   </head>
 
@@ -66,8 +63,8 @@
       <button id="rectangle" onclick="rectangleClick()"></button>
       <button id="ellipse" onclick="ellipseClick()"></button>
       <button id="circle" onclick="circleClick()"></button>
-      <button id="undo" onclick="undo()"></button>
-      <button id="redo" onclick="redo()"></button>
+      <button id="undo" onclick="undoRedoManager.undo()"></button>
+      <button id="redo" onclick="undoRedoManager.redo()"></button>
       <button id="save" onclick="save()"></button>
       <button id="delete" onclick="deleteShape()"></button>
       <!-- Color picker -->
@@ -75,9 +72,7 @@
         <button
           id="colorBtn"
           onclick="draEng.coloring = true; console.log('coloring = true')"
-        >
-          
-        </button>
+        ></button>
         <input id="color" type="color" />
       </div>
 
@@ -97,6 +92,7 @@
 
     <script src="utils.js"></script>
     <script src="drawingEngine.js"></script>
+    <script src="undoRedoManager.js"></script>
     <script src="shapes.js"></script>
     <script src="script.js"></script>
     <!-- built files will be auto injected -->

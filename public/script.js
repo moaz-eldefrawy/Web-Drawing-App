@@ -3,6 +3,7 @@
   console.log(c.toString());
 */
 var draEng = new DrawingEngine();
+var undoRedoManager = new UndoRedoManager();
 var p1, p2, currentShape, addedShape;
 class ShapeFactory {
   static getShape(p1, p2, shape) {
@@ -33,11 +34,9 @@ class ShapeFactory {
   }
 
   static create2PointsShape(shape) {
-    if(currentShape == undefined)
-      currentShape = shape;
-    else
-      return 0;
-    p1 = undefined
+    if (currentShape == undefined) currentShape = shape;
+    else return 0;
+    p1 = undefined;
     canvas.style.cursor = "crosshair";
     function recieveClicks(e) {
       if (p1 == undefined) {
@@ -55,20 +54,17 @@ class ShapeFactory {
         addedShape = ShapeFactory.getShape(p1, p2, shape);
         addedShape.addToCanvas();
         addedShape.draw();
-        currentShape = undefined
+        currentShape = undefined;
       } // end else
     } // end create2PointsShape()
 
     canvas.addEventListener("click", recieveClicks);
   }
   static create3PoitnsShape(shape) {
-    if(currentShape == undefined)
-      currentShape = shape;
-
-    else
-      return 0;
+    if (currentShape == undefined) currentShape = shape;
+    else return 0;
     /// creates a traingle without checking
-    p1=undefined
+    p1 = undefined;
     var p2, p3;
     canvas.style.cursor = "crosshair";
 
@@ -83,7 +79,7 @@ class ShapeFactory {
         triangle.addToCanvas();
         triangle.draw();
 
-        currentShape = undefined
+        currentShape = undefined;
       }
     }
 
@@ -108,31 +104,29 @@ window.onload = function() {
     return new Point(x, y);
   }
 
-
-  this.lineClick= function() {
+  this.lineClick = function() {
     ShapeFactory.create2PointsShape("line");
-  }
-  this.rectangleClick= function() {
+  };
+  this.rectangleClick = function() {
     ShapeFactory.create2PointsShape("rectangle");
-  }
-  this.circleClick= function() {
+  };
+  this.circleClick = function() {
     ShapeFactory.create2PointsShape("circle");
-  }
-  this.squareClick= function() {
+  };
+  this.squareClick = function() {
     ShapeFactory.create2PointsShape("square");
-  }
-  this.triangleClick= function() {
+  };
+  this.triangleClick = function() {
     ShapeFactory.create3PoitnsShape("triangle");
-  }
-  this.ellipseClick= function() {
+  };
+  this.ellipseClick = function() {
     ShapeFactory.create2PointsShape("ellipse");
-  }
+  };
 
-  this.deleteShape= function(){
-
-    console.log(draEng.selectedShape)
+  this.deleteShape = function() {
+    console.log(draEng.selectedShape);
     let shape = draEng.selectedShape;
-    draEng.clearSelectedShape()
-    draEng.deleteShape(shape)
-  }
-}
+    draEng.clearSelectedShape();
+    draEng.deleteShape(shape);
+  };
+};
