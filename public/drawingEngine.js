@@ -31,13 +31,7 @@ class DrawingEngine {
     draEng.refresh();
   }
 
-  shapeToResize() {
-    const pos = getMousePosition(canvas, event);
-    let arr = draEng.getShapesInRange(pos);
-    draEng.resizedShape = arr[0];
-
-    draEng.clearSelectedShape();
-  }
+ 
 
   detectResizeStart(event) {
     const pos = getMousePosition(canvas, event);
@@ -49,6 +43,8 @@ class DrawingEngine {
       event.button == 2 &&
       draEng.moving == false
     ) {
+      console.log("resizeing")
+      event.stopPropagation()
       canvas.addEventListener("mousemove", draEng.detectResizeChange);
       canvas.addEventListener("mouseup", draEng.detectResizeRelase);
     }
@@ -70,14 +66,15 @@ class DrawingEngine {
 
     /// update the chosen shape
     /// You can disable this shape and add a new one
-
+    // creation
     let newShape = ShapeFactory.getShape(p1, p2, draEng.resizedShape.type());
     newShape.setFillColor(draEng.resizedShape.fillColor);
-    undoRedoManager.shapeChange(newShape, draEng.shapeIndex(newShape));
-
-    draEng.deleteShape(draEng.resizedShape);
+    
+    let index = draEng.shapeIndex(draEng.resizedShape)
+    draEng.shapes[index] = newShape
+    undoRedoManager.shapeChange(draEng.shapes[index], index);
+    // removal
     draEng.clearSelectedShape();
-    draEng.addShape(newShape);
     draEng.refresh();
   }
 
@@ -103,8 +100,7 @@ class DrawingEngine {
     if (draEng.moving == true) {
       let shape = draEng.selectedShape;
       shape.rePosition(pos);
-      undoRedoManager.shapeChange(shape, draEng.shapeIndex(shape));
-
+      
       draEng.refresh();
       return;
     }
@@ -152,7 +148,7 @@ class DrawingEngine {
     //Clicked while in moving state => place shape at pos
     if (draEng.moving == true) {
       let shape = draEng.selectedShape;
-
+      undoRedoManager.shapeChange(shape, draEng.shapeIndex(shape));
       shape.unselect();
       draEng.selectedShape = null;
       draEng.moving = false;
