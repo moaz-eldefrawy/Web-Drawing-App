@@ -18,10 +18,13 @@ class DrawingEngine {
     }
   }
   deleteShape(shape) {
-    undoRedoManager.deleteShape(draEng.shapeIndex(shape));
-
-    //filter shapes
-    this.shapes.filter((x) => x != shape);
+    let arr = [];
+    let index = -1;
+    for (let i = 0; i < draEng.shapes.length; i++) {
+      if (draEng.shapes[i] != shape) arr.push(draEng.shapes[i]);
+      else index = i;
+    }
+    this.shapes = arr;
 
     undoRedoManager.deleteShape(index);
     draEng.refresh();
