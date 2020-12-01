@@ -1,3 +1,5 @@
+//const { transformVNodeArgs } = require("vue");
+
 /*
   let c = new Color(3,5,10);
   console.log(c.toString());
@@ -22,14 +24,32 @@ class ShapeFactory {
     return addedShape;
   }
 
-  static drawDottedShape(e, p1, shape) {
+  static getTriangle(newPoint, triangle) {
+    let newTriangle = triangle.cloneResize(newPoint);
+    return newTriangle;
+  }
+
+  static drawDottedShape(e, p1, shapeType) {
     var mousecoords = getMousePosition(canvas, e);
     let p2 = new Point(mousecoords.x, mousecoords.y);
-    var shape = ShapeFactory.getShape(p1, p2, shape);
+
+    var shape = ShapeFactory.getShape(p1, p2, shapeType);
 
     draEng.refresh();
     ctx.setLineDash([6]);
     shape.draw();
+    ctx.setLineDash([0]);
+  }
+
+  //I would have to change too many functions' parameters to make it compatible with triangles
+  static drawDottedTriangle(e, triangle) {
+    var mousecoords = getMousePosition(canvas, e);
+
+    let newTriangle = triangle.cloneResize(mousecoords);
+
+    draEng.refresh();
+    ctx.setLineDash([6]);
+    newTriangle.draw();
     ctx.setLineDash([0]);
   }
 
@@ -124,9 +144,16 @@ window.onload = function() {
   };
 
   this.deleteShape = function() {
+    if (draEng.selectedShape == null) return;
+
     console.log(draEng.selectedShape);
     let shape = draEng.selectedShape;
     draEng.clearSelectedShape();
     draEng.deleteShape(shape);
+  };
+
+  this.copyShape = function() {
+    if (draEng.selectedShape == null) return;
+    draEng.copySelectedShape();
   };
 };

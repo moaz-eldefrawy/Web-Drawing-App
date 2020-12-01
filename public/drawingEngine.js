@@ -2,7 +2,6 @@ class DrawingEngine {
   constructor() {
     this.shapes = [];
 
-    this.coloring = false;
     this.selectedShape = null;
     this.moving = false;
 
@@ -19,19 +18,24 @@ class DrawingEngine {
     }
   }
   deleteShape(shape) {
-    let arr = [];
-    let index = -1;
-    for (let i = 0; i < draEng.shapes.length; i++) {
-      if (draEng.shapes[i] != shape) arr.push(draEng.shapes[i]);
-      else index = i;
-    }
-    this.shapes = arr;
+    undoRedoManager.deleteShape(draEng.shapeIndex(shape));
+
+    //filter shapes
+    this.shapes.filter((x) => x != shape);
 
     undoRedoManager.deleteShape(index);
     draEng.refresh();
   }
 
- 
+  copySelectedShape() {
+    //have to unselect first to avoid copying the edge color
+    draEng.selectedShape.unselect();
+    let copy = draEng.selectedShape.clone();
+    copy.rePosition(new Point(600, 300));
+    draEng.addShape(copy);
+    draEng.clearSelectedShape();
+    draEng.refresh();
+  }
 
   detectResizeStart(event) {
     const pos = getMousePosition(canvas, event);
@@ -43,8 +47,11 @@ class DrawingEngine {
       event.button == 2 &&
       draEng.moving == false
     ) {
-      console.log("resizeing")
-      event.stopPropagation()
+      if (draEng.selectedShape.type() == "triangle")
+        draEng.selectedShape.selectPoint(pos);
+
+      console.log("resizeing");
+      event.stopPropagation();
       canvas.addEventListener("mousemove", draEng.detectResizeChange);
       canvas.addEventListener("mouseup", draEng.detectResizeRelase);
     }
@@ -53,7 +60,10 @@ class DrawingEngine {
   detectResizeChange(event) {
     let p1 = draEng.resizedShape.p1 || draEng.resizedShape.center;
     let p2 = getMousePosition(canvas, event);
-    ShapeFactory.drawDottedShape(event, p1, draEng.resizedShape.type());
+
+    if (draEng.resizedShape.type() == "triangle")
+      ShapeFactory.drawDottedTriangle(event, draEng.resizedShape);
+    else ShapeFactory.drawDottedShape(event, p1, draEng.resizedShape.type());
   }
 
   detectResizeRelase(event) {
@@ -67,11 +77,16 @@ class DrawingEngine {
     /// update the chosen shape
     /// You can disable this shape and add a new one
     // creation
-    let newShape = ShapeFactory.getShape(p1, p2, draEng.resizedShape.type());
+    let newShape;
+
+    if (draEng.resizedShape.type() == "triangle")
+      newShape = ShapeFactory.getTriangle(p2, draEng.resizedShape);
+    else newShape = ShapeFactory.getShape(p1, p2, draEng.resizedShape.type());
+
     newShape.setFillColor(draEng.resizedShape.fillColor);
-    
-    let index = draEng.shapeIndex(draEng.resizedShape)
-    draEng.shapes[index] = newShape
+
+    let index = draEng.shapeIndex(draEng.resizedShape);
+    draEng.shapes[index] = newShape;
     undoRedoManager.shapeChange(draEng.shapes[index], index);
     // removal
     draEng.clearSelectedShape();
@@ -100,19 +115,19 @@ class DrawingEngine {
     if (draEng.moving == true) {
       let shape = draEng.selectedShape;
       shape.rePosition(pos);
-      
+
       draEng.refresh();
       return;
     }
   }
 
   clearSelectedShape() {
-    if (draEng.selectedShape != null && draEng.selectedShape != undefined) {
+    if (draEng.selectedShape != null) {
       draEng.selectedShape.unselect();
-      draEng.selectedShape = null;
-      draEng.moving = false;
-      draEng.refresh();
     }
+    draEng.selectedShape = null;
+    draEng.moving = false;
+    draEng.refresh();
   }
 
   detectClick(event) {
@@ -125,24 +140,6 @@ class DrawingEngine {
       shape.unselect();
       draEng.selectedShape = null;
       draEng.refresh();
-    }
-
-    //handles coloring
-    if (draEng.coloring == true) {
-      let hex = document.getElementById("color").value;
-      console.log(hex);
-
-      // color all shapes under mouse
-      for (let i = 0; i < arr.length; i++) {
-        arr[i].setColor(hex);
-        undoRedoManager.shapeChange(arr[i], draEng.shapeIndex(arr[i]));
-      }
-
-      draEng.refresh();
-
-      draEng.coloring = false;
-
-      return;
     }
 
     //Clicked while in moving state => place shape at pos
@@ -171,6 +168,22 @@ class DrawingEngine {
     }
 
     draEng.refresh();
+  }
+
+  color() {
+    if (draEng.selectedShape == null) return;
+
+    let hex = document.getElementById("color").value;
+    console.log(hex);
+
+    let shape = draEng.selectedShape;
+    shape.setColor(hex);
+    undoRedoManager.shapeChange(shape, draEng.shapeIndex(shape));
+
+    shape.unselect();
+    draEng.selectedShape = null;
+    draEng.refresh();
+    return;
   }
 
   addShape(shape) {

@@ -9,7 +9,7 @@ class Shape {
   }
 
   unselect() {
-    this.edgeColor = this.oldEdgeColor;
+    this.edgeColor = new Color(0, 0, 0);
   }
 
   addToCanvas() {
@@ -345,6 +345,7 @@ class Triangle extends Shape {
     this.p1 = p1;
     this.p2 = p2;
     this.p3 = p3;
+    this.selectedPoint = null;
     this.edgeColor = new Color(0, 0, 0);
     this.fillColor = new Color(255, 255, 255);
   }
@@ -362,9 +363,26 @@ class Triangle extends Shape {
   }
 
   clone() {
-    let copy = new Line(this.p1, this.p2, this.p3);
+    let copy = new Triangle(this.p1, this.p2, this.p3);
     copy.edgeColor = this.edgeColor;
     copy.fillColor = this.fillColor;
+
+    return copy;
+  }
+
+  cloneResize(newPoint) {
+    let copy;
+    switch (this.selectedPoint) {
+      case this.p1:
+        copy = new Triangle(newPoint, this.p2, this.p3);
+        break;
+      case this.p2:
+        copy = new Triangle(this.p1, newPoint, this.p3);
+        break;
+      case this.p3:
+        copy = new Triangle(this.p1, this.p2, newPoint);
+        break;
+    }
 
     return copy;
   }
@@ -398,5 +416,22 @@ class Triangle extends Shape {
 
   type() {
     return "triangle";
+  }
+
+  //I assume the pos lies inside the triangle
+  //returns the closest point to pos
+  selectPoint(pos) {
+    let dist1 = distance(pos, this.p1),
+      dist2 = distance(pos, this.p2),
+      dist3 = distance(pos, this.p3);
+
+    switch (Math.min(dist1, dist2, dist3)) {
+      case dist1:
+        return (this.selectedPoint = this.p1);
+      case dist2:
+        return (this.selectedPoint = this.p2);
+      case dist3:
+        return (this.selectedPoint = this.p3);
+    }
   }
 }
