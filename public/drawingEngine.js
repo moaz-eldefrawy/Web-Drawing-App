@@ -1,5 +1,6 @@
 class DrawingEngine {
   constructor() {
+    
     this.shapes = [];
 
     this.selectedShape = null;
@@ -107,7 +108,6 @@ class DrawingEngine {
 
   detectMove(event) {
     const pos = getMousePosition(canvas, event);
-
     let arr = draEng.getShapesInRange(pos);
 
     //Change pointer if pointing at shape

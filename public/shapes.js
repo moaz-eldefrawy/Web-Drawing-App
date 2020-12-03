@@ -66,11 +66,17 @@ class Square extends Shape {
   }
 
   inRange(point) {
-    if (point.x >= this.p1.x && point.x <= this.p1.x + this.width) {
+    console.log(point)
+    console.log(p1, this.width, this.height)
+    if (Math.abs(point.x - this.p1.x) + Math.abs(this.p1.x + this.width - point.x) == 
+      Math.abs(this.width)  
+    ) {
       //in horizontal range
 
-      if (point.y >= this.p1.y && point.y <= this.p1.y + this.height) {
-        return true;
+      if (Math.abs(point.y - this.p1.y) + Math.abs(this.p1.y + this.height - point.y) == 
+      Math.abs(this.height)  
+      )  {
+        return true
       }
     }
 
@@ -251,7 +257,7 @@ class Line extends Shape {
   }
 
   clone() {
-    let copy = new Circle(this.p1, this.p2);
+    let copy = new Line(this.p1, this.p2);
     copy.edgeColor = this.edgeColor;
     copy.fillColor = this.fillColor;
 
