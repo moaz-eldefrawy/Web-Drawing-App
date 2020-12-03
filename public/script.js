@@ -8,6 +8,24 @@ var draEng = new DrawingEngine();
 var undoRedoManager = new UndoRedoManager();
 
 window.onload = function() {
+  document.addEventListener('keydown', function (event) {
+   
+    if (event.key === 'z') {
+      undoRedoManager.undo()
+    }
+    
+    if (event.key === 'y') {
+      undoRedoManager.redo()
+    }
+
+    if (event.key === 'c') {
+      draEng.color()
+    }
+    
+    if (event.key === 'd') {
+      deleteShape();
+    }
+  });
   var lineBtn = document.getElementById("line");
   var triangleBtn = document.getElementById("triangle");
   var squareBtn = document.getElementById("square");
