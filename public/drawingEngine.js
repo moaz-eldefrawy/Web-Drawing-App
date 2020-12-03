@@ -1,6 +1,5 @@
 class DrawingEngine {
   constructor() {
-    
     this.shapes = [];
 
     this.selectedShape = null;
@@ -161,7 +160,7 @@ class DrawingEngine {
     if (arr.length != 0) {
       if (draEng.selectedShape == arr[0]) {
         draEng.moving = true;
-     //   document.getElementById("state").innerHTML = "Moving";
+        //   document.getElementById("state").innerHTML = "Moving";
       }
 
       // one was already selected
@@ -196,8 +195,8 @@ class DrawingEngine {
 
   refresh() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    for (var shape in this.shapes) {
-      this.shapes[shape].draw();
+    for (let i = 0; i < this.shapes.length; i++) {
+      this.shapes[i].draw();
     }
   }
 

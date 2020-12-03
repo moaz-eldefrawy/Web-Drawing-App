@@ -54,7 +54,7 @@ class Square extends Shape {
   }
 
   clone() {
-    let copy = new Square(this.p1, this.width);
+    let copy = new Square(this.p1, this.width, this.height);
     copy.edgeColor = this.edgeColor;
     copy.fillColor = this.fillColor;
 
@@ -66,17 +66,19 @@ class Square extends Shape {
   }
 
   inRange(point) {
-    console.log(point)
-    console.log(p1, this.width, this.height)
-    if (Math.abs(point.x - this.p1.x) + Math.abs(this.p1.x + this.width - point.x) == 
-      Math.abs(this.width)  
+    if (
+      Math.abs(point.x - this.p1.x) +
+        Math.abs(this.p1.x + this.width - point.x) ==
+      Math.abs(this.width)
     ) {
       //in horizontal range
 
-      if (Math.abs(point.y - this.p1.y) + Math.abs(this.p1.y + this.height - point.y) == 
-      Math.abs(this.height)  
-      )  {
-        return true
+      if (
+        Math.abs(point.y - this.p1.y) +
+          Math.abs(this.p1.y + this.height - point.y) ==
+        Math.abs(this.height)
+      ) {
+        return true;
       }
     }
 
@@ -84,22 +86,17 @@ class Square extends Shape {
   }
 
   static instance(p1, p2) {
-    
-    let width = p2.x-p1.x;
+    let width = p2.x - p1.x;
     let height = p2.y - p1.y;
-    let heightSign
-    if(height < 0 && width > 0){
+    let heightSign;
+    if (height < 0 && width > 0) {
       height = Math.abs(width);
-      height = height*-1;
-      console.log('1')
-    }
-    else if(height > 0 && width < 0){
+      height = height * -1;
+    } else if (height > 0 && width < 0) {
       height = Math.abs(width);
-      console.log('2')
-    }
-    else { // hight > 0 && width > 0 || height <0 && widht <0
+    } else {
+      // hight > 0 && width > 0 || height <0 && widht <0
       height = width;
-      console.log('4')
     }
     return new Square(p1, width, height);
   }
@@ -139,7 +136,6 @@ class Rectangle extends Shape {
       this.p2.y - this.p1.y
     );
     ctx.lineWidth = 1;
-    
   }
 
   inRange(point) {
@@ -195,12 +191,11 @@ class Circle extends Shape {
     ctx.fillStyle = this.fillColor;
     ctx.strokeStyle = this.edgeColor;
     ctx.lineWidth = this.storkeWidth;
-    
+
     ctx.arc(this.p1.x, this.p1.y, this.radius, 0, Math.PI * 2, 0);
     ctx.stroke();
     ctx.fill();
     ctx.lineWidth = 1;
-    
   }
 
   inRange(point) {
@@ -253,7 +248,6 @@ class Line extends Shape {
     ctx.stroke();
     ctx.fill();
     ctx.lineWidth = 1;
-    
   }
 
   clone() {
@@ -315,7 +309,7 @@ class Ellipse extends Shape {
     ctx.fillStyle = this.fillColor;
     ctx.strokeStyle = this.edgeColor;
     ctx.lineWidth = this.storkeWidth;
-    
+
     ctx.ellipse(
       this.center.x,
       this.center.y,
@@ -328,7 +322,6 @@ class Ellipse extends Shape {
     ctx.stroke();
     ctx.fill();
     ctx.lineWidth = 1;
-    
   }
 
   inRange(point) {
@@ -390,7 +383,7 @@ class Triangle extends Shape {
     ctx.closePath();
     ctx.stroke();
     ctx.fill();
-    ctx.lineWidth = 1; 
+    ctx.lineWidth = 1;
   }
 
   clone() {
