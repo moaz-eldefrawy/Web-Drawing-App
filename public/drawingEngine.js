@@ -26,7 +26,7 @@ class DrawingEngine {
     }
     this.shapes = arr;
 
-    undoRedoManager.newShapes(this.shapes);
+    undoRedoManager.newShapes(draEng.shapes);
     draEng.refresh();
   }
 
@@ -90,7 +90,7 @@ class DrawingEngine {
 
     let index = draEng.shapeIndex(draEng.resizedShape);
     draEng.shapes[index] = newShape;
-    undoRedoManager.newShapes(this.shapes);
+    undoRedoManager.newShapes(draEng.shapes);
     // removal
     draEng.clearSelectedShape();
     draEng.refresh();
@@ -181,7 +181,7 @@ class DrawingEngine {
 
     let shape = draEng.selectedShape;
     shape.setColor(hex);
-    undoRedoManager.newShapes(this.shapes);
+    undoRedoManager.newShapes(draEng.shapes);
 
     shape.unselect();
     draEng.selectedShape = null;
@@ -191,7 +191,7 @@ class DrawingEngine {
 
   addShape(shape) {
     this.shapes.push(shape);
-    undoRedoManager.newShapes(this.shapes);
+    undoRedoManager.newShapes(draEng.shapes);
   }
 
   refresh() {
