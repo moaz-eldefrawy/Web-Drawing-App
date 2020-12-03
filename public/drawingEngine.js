@@ -161,6 +161,10 @@ class DrawingEngine {
       //Clicked on the already selected shape
       if (draEng.selectedShape == arr[0] && draEng.selectedShape != null) {
         draEng.moving = true;
+        let shape = draEng.selectedShape;
+        shape.rePosition(pos);
+
+        draEng.refresh();
         return;
       }
 
