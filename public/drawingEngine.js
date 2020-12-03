@@ -147,7 +147,7 @@ class DrawingEngine {
     //Clicked while in moving state => place shape at pos
     if (draEng.moving == true) {
       let shape = draEng.selectedShape;
-      undoRedoManager.newShapes(this.shapes);
+      undoRedoManager.newShapes(draEng.shapes);
       shape.unselect();
       draEng.selectedShape = null;
       draEng.moving = false;
