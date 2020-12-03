@@ -12,7 +12,7 @@
         box-sizing: border-box;
       }
       body {
-        background-color: #686968;
+        background-color: #c9c1c9;
       }
 
       #menu {
@@ -29,21 +29,41 @@
       }
       button {
         border: none;
-        border-radius: 30px;
         background-position: center; /* Center the image */
         background-repeat: no-repeat; /* Do not repeat the image */
         background-size: cover; /* Resize the background image to cover the entire container */
 
-        width: 40px;
-        height: 40px;
-        border: 1px lightgrey;
-        margin: 5px;
-        padding: 5px;
+        width: 80px;
+        height: 80px;
+        border: solid pink;
+        border-width: 0 2px 0px 0px;
+        margin: -2px;
+        padding: 10px;
+        background-color: white;
+        margin-bottom: 10px
+      }
+      
+      button:nth-child(1) {
+        border-radius: 15px 0px 0px 15px;
+      }
+      button:nth-child(11) {
+        border-right: 0;
+        border-radius: 0px 15px 15px 0px;
       }
 
+      #colorBtn{
+        border-radius: 15px;
+        border-right: 0;
+      }
+
+      #triangle{
+        width: 100px;
+      }
       button:hover {
         cursor: pointer;
       }
+
+
     </style>
   </head>
 
@@ -57,20 +77,20 @@
     </noscript>
     <!-- <div id="app"></div> -->
     <div id="menu">
-      <button id="line" onclick="lineClick()"></button>
-      <button id="triangle" onclick="triangleClick()"></button>
-      <button id="square" onclick="squareClick()"></button>
-      <button id="rectangle" onclick="rectangleClick()"></button>
-      <button id="ellipse" onclick="ellipseClick()"></button>
-      <button id="circle" onclick="circleClick()"></button>
-      <button id="undo" onclick="undoRedoManager.undo()"></button>
-      <button id="redo" onclick="undoRedoManager.redo()"></button>
-      <button id="save" onclick="save()"></button>
-      <button id="copy" onclick="copyShape()"></button>
-      <button id="delete" onclick="deleteShape()"></button>
+      <button id="line" onclick="lineClick()"><div></div></button>
+      <button id="triangle" onclick="triangleClick()"><div></div></button>
+      <button id="square" onclick="squareClick()"><div></div></button>
+      <button id="rectangle" onclick="rectangleClick()"><div></div></button>
+      <button id="ellipse" onclick="ellipseClick()"><div></div></button>
+      <button id="circle" onclick="circleClick()"><div></div></button>
+      <button id="copy" onclick="copyShape()"><div></div></button>
+      <button id="delete" onclick="deleteShape()"><div></div></button>
+      <button id="undo" onclick="undoRedoManager.undo()"><div></div></button>
+      <button id="redo" onclick="undoRedoManager.redo()"><div></div></button>
+      <button id="save" onclick="save()"><div></div></button>
       <!-- Color picker -->
       <div style="display: flex; flex-direction: column; align-items: center;">
-        <button id="colorBtn" onclick="draEng.color()"></button>
+        <button id="colorBtn" onclick="draEng.color()"><div></div></button>
         <input id="color" type="color" />
       </div>
 

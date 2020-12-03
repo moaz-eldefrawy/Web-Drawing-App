@@ -161,7 +161,7 @@ class DrawingEngine {
     if (arr.length != 0) {
       if (draEng.selectedShape == arr[0]) {
         draEng.moving = true;
-        document.getElementById("state").innerHTML = "Moving";
+     //   document.getElementById("state").innerHTML = "Moving";
       }
 
       // one was already selected

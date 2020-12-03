@@ -43,61 +43,65 @@ export default {
 <style>
 /* MENU */
 
-button {
+button:hover {
+  cursor: pointer;
+}
+
+button > div{
+  width:100%;
+  height: 100%;
+ 
   border: none;
   background-position: center; /* Center the image */
   background-repeat: no-repeat; /* Do not repeat the image */
   background-size: cover; /* Resize the background image to cover the entire container */
 
-  width: 80px;
-  height: 80px;
-  border: 1px lightgrey;
 }
 
-button:hover {
-  cursor: pointer;
-}
-
-#line {
+#line > div {
   background-image: url("./assets/line.png");
 }
 
-#triangle {
+#triangle > div{
   background-image: url("./assets/triangle.png");
-  width: 100px;
 }
 
-#square {
+#square > div {
   background-image: url("./assets/square.png");
 }
-#rectangle {
+#rectangle > div {
   background-image: url("./assets/rectangle.png");
 }
-#ellipse {
+#ellipse > div {
   background-image: url("./assets/ellipse.png");
 }
-#circle {
+#circle > div {
   background-image: url("./assets/circle.png");
 }
 
-#undo {
+#undo > div {
   background-image: url("./assets/undo.png");
 }
-#redo {
+#redo > div {
   background-image: url("./assets/redo.png");
 }
 
-#save {
+#save > div {
   background-image: url("./assets/save.png");
 }
 
-#delete {
+#delete > div {
   background-image: url("./assets/delete.png");    
 }
 
-#colorBtn{
+#colorBtn > div{
   background-image: url("./assets/colorBtn.png");      
 }
+
+#copy > div{
+  background-image: url("./assets/copy.png");      
+}
+
 /* END MENU */
 
 #app {

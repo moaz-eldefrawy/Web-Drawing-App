@@ -1,15 +1,18 @@
 class Shape {
   constructor() {
     this.oldEdgeColor = new Color(0, 0, 0);
+    this.storkeWidth = 1;
   }
 
   select() {
     this.oldEdgeColor = this.edgeColor;
-    this.edgeColor = new Color(0, 255, 0);
+    this.edgeColor = new Color(0, 0, 0);
+    this.storkeWidth = 5;
   }
 
   unselect() {
     this.edgeColor = new Color(0, 0, 0);
+    this.storkeWidth = 1;
   }
 
   addToCanvas() {
@@ -31,9 +34,10 @@ class Shape {
 
 class Square extends Shape {
   // p1 -> top left piont
-  constructor(p1, width) {
+  constructor(p1, width, height) {
     super();
     this.p1 = p1;
+    this.height = height;
     this.width = width;
     this.edgeColor = new Color(0, 0, 0);
     this.fillColor = new Color(255, 255, 255);
@@ -43,8 +47,10 @@ class Square extends Shape {
     ctx.beginPath();
     ctx.fillStyle = this.fillColor;
     ctx.strokeStyle = this.edgeColor;
-    ctx.fillRect(this.p1.x, this.p1.y, this.width, this.width);
-    ctx.strokeRect(this.p1.x, this.p1.y, this.width, this.width);
+    ctx.lineWidth = this.storkeWidth;
+    ctx.fillRect(this.p1.x, this.p1.y, this.width, this.height);
+    ctx.strokeRect(this.p1.x, this.p1.y, this.width, this.height);
+    ctx.lineWidth = 1;
   }
 
   clone() {
@@ -63,7 +69,7 @@ class Square extends Shape {
     if (point.x >= this.p1.x && point.x <= this.p1.x + this.width) {
       //in horizontal range
 
-      if (point.y >= this.p1.y && point.y <= this.p1.y + this.width) {
+      if (point.y >= this.p1.y && point.y <= this.p1.y + this.height) {
         return true;
       }
     }
@@ -72,21 +78,24 @@ class Square extends Shape {
   }
 
   static instance(p1, p2) {
-    //to insure width is positive
-    //make p1 the smaller x,y (top left)
-    if (!p1.smaller(p2)) {
-      [p1, p2] = [p2, p1];
+    
+    let width = p2.x-p1.x;
+    let height = p2.y - p1.y;
+    let heightSign
+    if(height < 0 && width > 0){
+      height = Math.abs(width);
+      height = height*-1;
+      console.log('1')
     }
-
-    let width;
-    let deltaX = Math.abs(p1.x - p2.x);
-    let deltaY = Math.abs(p1.y - p2.y);
-    if (deltaX <= deltaY) {
-      width = p2.x - p1.x;
-    } else {
-      width = p2.y - p1.y;
+    else if(height > 0 && width < 0){
+      height = Math.abs(width);
+      console.log('2')
     }
-    return new Square(p1, width);
+    else { // hight > 0 && width > 0 || height <0 && widht <0
+      height = width;
+      console.log('4')
+    }
+    return new Square(p1, width, height);
   }
 
   type() {
@@ -110,6 +119,7 @@ class Rectangle extends Shape {
     ctx.beginPath();
     ctx.fillStyle = this.fillColor;
     ctx.strokeStyle = this.edgeColor;
+    ctx.lineWidth = this.storkeWidth;
     ctx.fillRect(
       this.p1.x,
       this.p1.y,
@@ -122,6 +132,8 @@ class Rectangle extends Shape {
       this.p2.x - this.p1.x,
       this.p2.y - this.p1.y
     );
+    ctx.lineWidth = 1;
+    
   }
 
   inRange(point) {
@@ -176,9 +188,13 @@ class Circle extends Shape {
     ctx.beginPath();
     ctx.fillStyle = this.fillColor;
     ctx.strokeStyle = this.edgeColor;
+    ctx.lineWidth = this.storkeWidth;
+    
     ctx.arc(this.p1.x, this.p1.y, this.radius, 0, Math.PI * 2, 0);
     ctx.stroke();
     ctx.fill();
+    ctx.lineWidth = 1;
+    
   }
 
   inRange(point) {
@@ -225,10 +241,13 @@ class Line extends Shape {
     ctx.beginPath();
     ctx.fillStyle = this.fillColor;
     ctx.strokeStyle = this.edgeColor;
+    ctx.lineWidth = this.storkeWidth;
     ctx.moveTo(this.p1.x, this.p1.y);
     ctx.lineTo(this.p2.x, this.p2.y);
     ctx.stroke();
     ctx.fill();
+    ctx.lineWidth = 1;
+    
   }
 
   clone() {
@@ -289,6 +308,8 @@ class Ellipse extends Shape {
     ctx.beginPath();
     ctx.fillStyle = this.fillColor;
     ctx.strokeStyle = this.edgeColor;
+    ctx.lineWidth = this.storkeWidth;
+    
     ctx.ellipse(
       this.center.x,
       this.center.y,
@@ -300,6 +321,8 @@ class Ellipse extends Shape {
     );
     ctx.stroke();
     ctx.fill();
+    ctx.lineWidth = 1;
+    
   }
 
   inRange(point) {
@@ -354,12 +377,14 @@ class Triangle extends Shape {
     ctx.beginPath();
     ctx.fillStyle = this.fillColor;
     ctx.strokeStyle = this.edgeColor;
+    ctx.lineWidth = this.storkeWidth;
     ctx.moveTo(this.p1.x, this.p1.y);
     ctx.lineTo(this.p2.x, this.p2.y);
     ctx.lineTo(this.p3.x, this.p3.y);
     ctx.closePath();
     ctx.stroke();
     ctx.fill();
+    ctx.lineWidth = 1; 
   }
 
   clone() {
