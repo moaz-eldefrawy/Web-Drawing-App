@@ -87,7 +87,12 @@
       <button id="delete" onclick="deleteShape()"><div></div></button>
       <button id="undo" onclick="undoRedoManager.undo()"><div></div></button>
       <button id="redo" onclick="undoRedoManager.redo()"><div></div></button>
-      <button id="save" onclick="save()"><div></div></button>
+      <button id="saveJSON" onclick="saveJSON()"></button>
+      <button id="saveXML" onclick="saveXML()"></button>
+      <input id="fileInput" name="file" type="file" size="60"/>
+      <button id="loadXML" onclick="loadJSON()">load Json</button>
+      <button id="loadXML" onclick="loadXML()">load Xml</button>
+
       <!-- Color picker -->
       <div style="display: flex; flex-direction: column; align-items: center;">
         <button id="colorBtn" onclick="draEng.color()"><div></div></button>

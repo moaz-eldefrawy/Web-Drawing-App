@@ -178,8 +178,9 @@ class DrawingEngine {
     let hex = document.getElementById("color").value;
     console.log(hex);
 
+    let RGBColor = Color.newColorHexa(hex);
     let shape = draEng.selectedShape;
-    shape.setColor(hex);
+    shape.setColor(RGBColor);
     undoRedoManager.shapeChange(shape, draEng.shapeIndex(shape));
 
     shape.unselect();

@@ -36,6 +36,7 @@ class Square extends Shape {
   // p1 -> top left piont
   constructor(p1, width, height) {
     super();
+    this.type = 'square';
     this.p1 = p1;
     this.height = height;
     this.width = width;
@@ -111,6 +112,7 @@ class Rectangle extends Shape {
   // p2 -> down right point
   constructor(p1, p2) {
     super();
+    this.type = "rectangle";
     this.p1 = p1;
     this.p2 = p2;
 
@@ -180,6 +182,7 @@ class Circle extends Shape {
   // p1 -> radius
   constructor(p1, radius) {
     super();
+    this.type = 'circle';
     this.p1 = p1;
     this.radius = radius;
     this.edgeColor = new Color(0, 0, 0);
@@ -232,6 +235,7 @@ class Line extends Shape {
   /// p2 -> second point
   constructor(p1, p2) {
     super();
+    this.type = 'line';
     this.p1 = p1;
     this.p2 = p2;
     this.edgeColor = new Color(0, 0, 0);
@@ -296,6 +300,7 @@ class Ellipse extends Shape {
 
   constructor(center, radiusX, radiusY, rotation) {
     super();
+    this.type = 'ellipse';
     this.center = center;
     this.radiusX = radiusX;
     this.radiusY = radiusY;
@@ -364,6 +369,7 @@ class Ellipse extends Shape {
 class Triangle extends Shape {
   constructor(p1, p2, p3) {
     super();
+    this.type = 'triangle';
     this.p1 = p1;
     this.p2 = p2;
     this.p3 = p3;
