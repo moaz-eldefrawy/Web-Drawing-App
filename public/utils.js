@@ -4,6 +4,10 @@ class Point {
     this.y = y;
   }
 
+  static JSONtoPoint(j) {
+    return new Point(j.x, j.y);
+  }
+
   subtract(point) {
     return new Point(this.x - point.x, this.y - point.y);
   }

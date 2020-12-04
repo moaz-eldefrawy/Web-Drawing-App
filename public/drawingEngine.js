@@ -26,7 +26,7 @@ class DrawingEngine {
     }
     this.shapes = arr;
 
-    undoRedoManager.deleteShape(index);
+    undoRedoManager.newShapes(draEng.shapes);
     draEng.refresh();
   }
 
@@ -50,7 +50,7 @@ class DrawingEngine {
       event.button == 2 &&
       draEng.moving == false
     ) {
-      if (draEng.selectedShape.type() == "triangle")
+      if (draEng.selectedShape.type == "triangle")
         draEng.selectedShape.selectPoint(pos);
 
       console.log("resizeing");
@@ -64,9 +64,9 @@ class DrawingEngine {
     let p1 = draEng.resizedShape.p1 || draEng.resizedShape.center;
     let p2 = getMousePosition(canvas, event);
 
-    if (draEng.resizedShape.type() == "triangle")
+    if (draEng.resizedShape.type == "triangle")
       ShapeFactory.drawDottedTriangle(event, draEng.resizedShape);
-    else ShapeFactory.drawDottedShape(event, p1, draEng.resizedShape.type());
+    else ShapeFactory.drawDottedShape(event, p1, draEng.resizedShape.type);
   }
 
   detectResizeRelase(event) {
@@ -82,15 +82,15 @@ class DrawingEngine {
     // creation
     let newShape;
 
-    if (draEng.resizedShape.type() == "triangle")
+    if (draEng.resizedShape.type == "triangle")
       newShape = ShapeFactory.getTriangle(p2, draEng.resizedShape);
-    else newShape = ShapeFactory.getShape(p1, p2, draEng.resizedShape.type());
+    else newShape = ShapeFactory.getShape(p1, p2, draEng.resizedShape.type);
 
     newShape.setFillColor(draEng.resizedShape.fillColor);
 
     let index = draEng.shapeIndex(draEng.resizedShape);
     draEng.shapes[index] = newShape;
-    undoRedoManager.shapeChange(draEng.shapes[index], index);
+    undoRedoManager.newShapes(draEng.shapes);
     // removal
     draEng.clearSelectedShape();
     draEng.refresh();
@@ -99,7 +99,7 @@ class DrawingEngine {
   //give it a mouse point, returns the shapes that return inRange() = true
   getShapesInRange(pos) {
     let arr = [];
-    for (let i = 0; i < draEng.shapes.length; i++) {
+    for (let i = draEng.shapes.length - 1; i >= 0; i--) {
       if (draEng.shapes[i].inRange(pos)) arr.push(draEng.shapes[i]);
     }
     return arr;
@@ -138,16 +138,16 @@ class DrawingEngine {
 
     //unselect when clicking empty space && there is a shape selected
     if (arr.length == 0 && draEng.selectedShape != null) {
-      let shape = draEng.selectedShape;
-      shape.unselect();
-      draEng.selectedShape = null;
+      draEng.clearSelectedShape();
       draEng.refresh();
+
+      return;
     }
 
     //Clicked while in moving state => place shape at pos
     if (draEng.moving == true) {
       let shape = draEng.selectedShape;
-      undoRedoManager.shapeChange(shape, draEng.shapeIndex(shape));
+      undoRedoManager.newShapes(draEng.shapes);
       shape.unselect();
       draEng.selectedShape = null;
       draEng.moving = false;
@@ -156,14 +156,19 @@ class DrawingEngine {
       return;
     }
 
-    //Clicked again on a selected shape
+    //Clicked on a shape
     if (arr.length != 0) {
-      if (draEng.selectedShape == arr[0]) {
+      //Clicked on the already selected shape
+      if (draEng.selectedShape == arr[0] && draEng.selectedShape != null) {
         draEng.moving = true;
-        //   document.getElementById("state").innerHTML = "Moving";
+        let shape = draEng.selectedShape;
+        shape.rePosition(pos);
+
+        draEng.refresh();
+        return;
       }
 
-      // one was already selected
+      //Clicked on a different shape from the one that was selected
       if (draEng.selectedShape != null) draEng.selectedShape.unselect();
       draEng.selectedShape = arr[0];
       arr[0].select();
@@ -181,7 +186,7 @@ class DrawingEngine {
     let RGBColor = Color.newColorHexa(hex);
     let shape = draEng.selectedShape;
     shape.setColor(RGBColor);
-    undoRedoManager.shapeChange(shape, draEng.shapeIndex(shape));
+    undoRedoManager.newShapes(draEng.shapes);
 
     shape.unselect();
     draEng.selectedShape = null;
@@ -191,7 +196,7 @@ class DrawingEngine {
 
   addShape(shape) {
     this.shapes.push(shape);
-    undoRedoManager.createShape(shape);
+    undoRedoManager.newShapes(draEng.shapes);
   }
 
   refresh() {

@@ -8,6 +8,24 @@ var draEng = new DrawingEngine();
 var undoRedoManager = new UndoRedoManager();
 
 window.onload = function() {
+  document.addEventListener('keydown', function (event) {
+   
+    if (event.key === 'z') {
+      undoRedoManager.undo()
+    }
+    
+    if (event.key === 'y') {
+      undoRedoManager.redo()
+    }
+
+    if (event.key === 'c') {
+      draEng.color()
+    }
+    
+    if (event.key === 'd') {
+      deleteShape();
+    }
+  });
   var lineBtn = document.getElementById("line");
   var triangleBtn = document.getElementById("triangle");
   var squareBtn = document.getElementById("square");
@@ -70,17 +88,17 @@ window.onload = function() {
       let newShape;
       console.log(currentShape);
       if(type == 'circle')
-        newShape = new Circle(currentShape.p1, currentShape.radius);
+        newShape = new Circle(Point.JSONtoPoint(currentShape.p1), currentShape.radius);
       else if(type == 'ellipse')
-        newShape = new Ellipse(currentShape.center, currentShape.radiusX, currentShape.radiusY);
+        newShape = new Ellipse(Point.JSONtoPoint(currentShape.center), currentShape.radiusX, currentShape.radiusY);
       else if(type == 'line')
-        newShape = new Line(currentShape.p1, currentShape.p2);
+        newShape = new Line(Point.JSONtoPoint(currentShape.p1), Point.JSONtoPoint(currentShape.p2));
       else if(type == 'square')
-        newShape = new Square(currentShape.p1, currentShape.width);
+        newShape = new Square(Point.JSONtoPoint(currentShape.p1), currentShape.width);
       else if(type == 'rectangle')
-        newShape = new Rectangle(currentShape.p1, currentShape.p2);
+        newShape = new Rectangle(Point.JSONtoPoint(currentShape.p1), Point.JSONtoPoint(currentShape.p2));
       else if(type == 'triangle')
-        newShape = new Triangle(currentShape.p1, currentShape.p2, currentShape.p3);
+        newShape = new Triangle(Point.JSONtoPoint(currentShape.p1), Point.JSONtoPoint(currentShape.p2), Point.JSONtoPoint(currentShape.p3));
 
       newShape.fillColor = new Color(currentShape.fillColor.r, currentShape.fillColor.g, currentShape.fillColor.b);
       newShape.edgeColor = new Color(currentShape.edgeColor.r, currentShape.edgeColor.g, currentShape.edgeColor.b);
