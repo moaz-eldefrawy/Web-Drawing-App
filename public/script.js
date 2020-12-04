@@ -94,7 +94,7 @@ window.onload = function() {
       else if(type == 'line')
         newShape = new Line(Point.JSONtoPoint(currentShape.p1), Point.JSONtoPoint(currentShape.p2));
       else if(type == 'square')
-        newShape = new Square(Point.JSONtoPoint(currentShape.p1), currentShape.width);
+        newShape = new Square(Point.JSONtoPoint(currentShape.p1), currentShape.width, currentShape.height);
       else if(type == 'rectangle')
         newShape = new Rectangle(Point.JSONtoPoint(currentShape.p1), Point.JSONtoPoint(currentShape.p2));
       else if(type == 'triangle')
