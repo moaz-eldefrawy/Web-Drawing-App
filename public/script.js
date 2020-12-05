@@ -104,9 +104,12 @@ window.onload = function() {
       newShape.edgeColor = new Color(currentShape.edgeColor.r, currentShape.edgeColor.g, currentShape.edgeColor.b);
       shapes.push(newShape);
     }
-    console.log('Shapes after processing');
-    console.log(shapes);
+
     draEng.shapes = shapes;
+    undoRedoManager.snapShots = [[]];
+    undoRedoManager.currentSnapIndex = 0;
+    undoRedoManager.shapes = [];
+    undoRedoManager.newShapes(shapes);
     draEng.refresh();
   }
 
