@@ -112,12 +112,12 @@ button > div{
 }
 
 #loadJSON > div{
-  background-image: url("./assets/copy.png");      
+  background-image: url("./assets/loadJSON.png");      
 }
 
 
 #loadXML > div{
-  background-image: url("./assets/copy.png");      
+  background-image: url("./assets/loadXML.png");      
 }
 
 
