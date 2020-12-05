@@ -131,7 +131,7 @@ window.onload = function() {
     formData.append("file", file);
 
     fetch('http://localhost:3000/uploadXMLFile', {
-      method: "post",
+      method: "post", 
       body: formData
     })
     .then(res => res.json())
