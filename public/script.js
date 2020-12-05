@@ -65,7 +65,6 @@ window.onload = function() {
   this.deleteShape = function() {
     if (draEng.selectedShape == null) return;
 
-    console.log(draEng.selectedShape);
     let shape = draEng.selectedShape;
     draEng.clearSelectedShape();
     draEng.deleteShape(shape);
@@ -78,15 +77,11 @@ window.onload = function() {
 
   this.processShapes = function(jsonArray) {
     let shapes = [];
-    console.log('MY JSON ARRAY');
-    console.log(jsonArray);
     let n = jsonArray.length;
     for(let i = 0; i < n;i++) {
-      console.log(i);
       let currentShape = jsonArray[i];
       let type = currentShape.type;
       let newShape;
-      console.log(currentShape);
       if(type == 'circle')
         newShape = new Circle(Point.JSONtoPoint(currentShape.p1), currentShape.radius);
       else if(type == 'ellipse')
@@ -125,8 +120,6 @@ window.onload = function() {
     })
     .then(res => res.json())
     .then(data => {
-      console.log('inside JSON');
-      console.log(data);
       this.processShapes(data);
     });
   }
@@ -143,17 +136,13 @@ window.onload = function() {
     })
     .then(res => res.json())
     .then(data => {
-      console.log(data);
       shapes = this.processShapes(data);
-      console.log(shapes);
     });
   }
 
   this.saveJSON = function() {
     let shapes = JSON.stringify(draEng.shapes);
 
-    console.log('INSIDE SAVE FUNCTION');
-    console.log(shapes);
     fetch('http://localhost:3000/createJsonFile', {
       method: "post",
       body: shapes,
@@ -171,8 +160,6 @@ window.onload = function() {
   this.saveXML = function() {
     let shapes = JSON.stringify(draEng.shapes);
 
-    console.log('INSIDE SAVE FUNCTION');
-    console.log(shapes);
     fetch('http://localhost:3000/createXMLFile', {
       method: "post",
       body: shapes,

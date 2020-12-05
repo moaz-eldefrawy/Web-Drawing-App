@@ -53,7 +53,6 @@ class DrawingEngine {
       if (draEng.selectedShape.type == "triangle")
         draEng.selectedShape.selectPoint(pos);
 
-      console.log("resizeing");
       event.stopPropagation();
       canvas.addEventListener("mousemove", draEng.detectResizeChange);
       canvas.addEventListener("mouseup", draEng.detectResizeRelase);
@@ -114,10 +113,9 @@ class DrawingEngine {
     else canvas.style.cursor = "initial";
 
     //handles moving
-    if (draEng.moving == true) {
+    if (draEng.moving == true) {  
       let shape = draEng.selectedShape;
       shape.rePosition(pos);
-
       draEng.refresh();
       return;
     }
@@ -136,19 +134,12 @@ class DrawingEngine {
     const pos = getMousePosition(canvas, event);
     let arr = draEng.getShapesInRange(pos);
 
-    //unselect when clicking empty space && there is a shape selected
-    if (arr.length == 0 && draEng.selectedShape != null) {
-      draEng.clearSelectedShape();
-      draEng.refresh();
-
-      return;
-    }
 
     //Clicked while in moving state => place shape at pos
     if (draEng.moving == true) {
       let shape = draEng.selectedShape;
-      undoRedoManager.newShapes(draEng.shapes);
       shape.unselect();
+      undoRedoManager.newShapes(draEng.shapes);
       draEng.selectedShape = null;
       draEng.moving = false;
       document.getElementById("state").innerHTML = "";
@@ -156,12 +147,22 @@ class DrawingEngine {
       return;
     }
 
+    //unselect when clicking empty space && there is a shape selected
+    if (arr.length == 0 && draEng.selectedShape != null) {
+      draEng.clearSelectedShape();
+      draEng.refresh();
+
+      return;
+    }
+    
+
     //Clicked on a shape
     if (arr.length != 0) {
       //Clicked on the already selected shape
-      if (draEng.selectedShape == arr[0] && draEng.selectedShape != null) {
+      if (draEng.selectedShape != null && draEng.selectedShape == arr[0]) {
         draEng.moving = true;
         let shape = draEng.selectedShape;
+
         shape.rePosition(pos);
 
         draEng.refresh();
@@ -181,7 +182,6 @@ class DrawingEngine {
     if (draEng.selectedShape == null) return;
 
     let hex = document.getElementById("color").value;
-    console.log(hex);
 
     let RGBColor = Color.newColorHexa(hex);
     let shape = draEng.selectedShape;

@@ -102,6 +102,25 @@ button > div{
   background-image: url("./assets/copy.png");      
 }
 
+#saveJSON > div{
+  background-image: url("./assets/saveJSON.png");      
+}
+
+
+#saveXML > div{
+  background-image: url("./assets/saveXML.png");      
+}
+
+#loadJSON > div{
+  background-image: url("./assets/copy.png");      
+}
+
+
+#loadXML > div{
+  background-image: url("./assets/copy.png");      
+}
+
+
 /* END MENU */
 
 #app {
